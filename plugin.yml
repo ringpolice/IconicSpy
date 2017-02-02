@@ -1,0 +1,14 @@
+name: IconicSpy
+main: com.rignpolice.pl.Commandspy
+version: 3.4
+author: rignpolice
+authors: [mck4]
+
+commands:
+  commandspy:
+    description: Commandspy!
+    aliases: [cs, cspy, cmdspy]
+    permission: ic.spy
+  csreload:
+    description: Reloads IconicSpy
+    permission: ic.spy
