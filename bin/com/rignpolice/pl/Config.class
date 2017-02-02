@@ -1,0 +1,99 @@
+package com.rignpolice.pl;
+
+import java.io.File;
+import java.io.IOException;
+
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class Config
+{
+  JavaPlugin plugin;
+  File dataFolder;
+  
+  public Config(JavaPlugin plugin)
+  {
+    this.plugin = plugin;
+    this.dataFolder = plugin.getDataFolder();
+    File dir = new File(this.dataFolder + File.separator + "players");
+    if (!dir.exists()) {
+      try
+      {
+        dir.mkdirs();
+      }
+      catch (Exception e)
+      {
+        e.printStackTrace();
+      }
+    }
+  }
+  
+  public String path(String uuid)
+  {
+    return this.dataFolder + File.separator + "players" + File.separator + uuid + ".yml";
+  }
+  
+  public boolean exists(Player p)
+  {
+    File yml = new File(path(p.getUniqueId().toString()));
+    return yml.exists();
+  }
+  
+  public void createConfig(Player p)
+  {
+    File yml = new File(path(p.getUniqueId().toString()));
+    if (exists(p)) {
+      return;
+    }
+    FileConfiguration playerConfig = null;
+    try
+    {
+      yml.createNewFile();
+      playerConfig = YamlConfiguration.loadConfiguration(yml);
+      playerConfig.save(yml);
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
+  }
+  
+  public void set(Player p, String configPath, Object value)
+  {
+    File yml = new File(path(p.getUniqueId().toString()));
+    FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(yml);
+    playerConfig.set(configPath, value);
+    try
+    {
+      playerConfig.save(yml);
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
+    }
+  }
+  
+  public String getString(Player p, String configPath)
+  {
+    File yml = new File(path(p.getUniqueId().toString()));
+    FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(yml);
+    return playerConfig.getString(configPath);
+  }
+  
+  public int getInteger(Player p, String configPath)
+  {
+    File yml = new File(path(p.getUniqueId().toString()));
+    FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(yml);
+    return playerConfig.getInt(configPath);
+  }
+  
+  public boolean getBoolean(Player p, String configPath)
+  {
+    File yml = new File(path(p.getUniqueId().toString()));
+    FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(yml);
+    return playerConfig.getBoolean(configPath);
+  }
+}
+
